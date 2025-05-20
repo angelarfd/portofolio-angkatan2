@@ -1,3 +1,6 @@
+<?php
+session_start()
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +33,7 @@
                                     <div class="mb-3">
                                         <label for="" class="form-label">Password</label>
                                         <input type="password" class="form-control"
-                                            name="email" placeholder="Masukkan Password Anda">
+                                            name="password" placeholder="Masukkan Password Anda">
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Login</button>
