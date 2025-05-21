@@ -1,3 +1,39 @@
+<?php
+include 'config/koneksi.php';
+
+//jika user/pengguna yang memakai aplikasi memencet tombol simpan
+//ambil data dari inputan, email, nama, dan password
+//masukkan ke dalam table user (name, email, password) nilainya dari masing-masing inputan
+if (isset($_POST['simpan'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = sha1($_POST['password']);
+
+    $query = mysqli_query($config, "INSERT INTO users (name, email, password)
+    VALUES ('$name','$email','$password')");
+    if ($query) {
+        header("location:user.php?tambah=berhasil");
+    }
+}
+
+$header = isset($_GET['edit']) ? "Edit" : "Tambah";
+$id_user = isset($_GET['edit']) ? $_GET['edit'] : '';
+$queryEdit = mysqli_query($config, "SELECT * FROM users WHERE id= '$id_user'");
+$rowEdit = mysqli_fetch_assoc($queryEdit);
+
+if (isset($_POST['edit'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = sha1($_POST['password']);
+
+    $queryUpdate = mysqli_query($config, "UPDATE users SET name='$name', email='$email', password='$password' WHERE id='$id_user'");
+
+    if ($queryUpdate) {
+        header("location:user.php?ubah=berhasil");
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +50,7 @@
         <header class="shadow">
             <nav class="navbar navbar-expand-lg bg-body-white">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">CMS Reza</a>
+                    <a class="navbar-brand" href="#">CMS Angel</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -52,7 +88,7 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                Data User
+                                <?= $header ?> User
                             </div>
                             <div class="card-body">
                                 <form action="" method="post">
@@ -61,9 +97,10 @@
                                             <label for="">Nama </label>
                                         </div>
                                         <div class="col-sm-10">
-                                            <input type="text"
+                                            <input required name="name" type="name"
                                                 class="form-control"
-                                                placeholder="Masukkan nama anda">
+                                                placeholder="Masukkan nama anda"
+                                                value="<?= $rowEdit['name'] ?>">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -71,9 +108,10 @@
                                             <label for="">Email </label>
                                         </div>
                                         <div class="col-sm-10">
-                                            <input type="email"
+                                            <input required name="email" type="email"
                                                 class="form-control"
-                                                placeholder="Masukkan email anda">
+                                                placeholder="Masukkan email anda"
+                                                value="<?= $rowEdit['email'] ?>">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -81,15 +119,15 @@
                                             <label for="">Password </label>
                                         </div>
                                         <div class="col-sm-10">
-                                            <input type="password"
+                                            <input required name="password" type="password"
                                                 class="form-control"
                                                 placeholder="Masukkan password anda">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col-sm-12">
-                                            <button type="submit"
-                                            class="btn btn-primary">Simpan</button>
+                                            <button name="<?= isset($_GET['edit']) ? 'edit' : 'simpan'; ?> " type="submit"
+                                                class="btn btn-primary">Simpan</button>
                                         </div>
                                     </div>
                                 </form>
@@ -98,8 +136,8 @@
                     </div>
                 </div>
             </div>
+            </>
         </div>
-    </div>
 </body>
 
 </html>

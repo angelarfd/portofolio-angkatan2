@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (empty($_SESSION['email'])) {
+if (empty($_SESSION['name'])) {
     header("location;8.php?access=failed");
 }
 ?>
